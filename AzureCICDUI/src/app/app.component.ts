@@ -1,20 +1,50 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterOutlet } from '@angular/router';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
+import { TableModule } from 'primeng/table';
+import { take } from 'rxjs';
+import { switchMap, tap } from 'rxjs/operators';
+import { User } from '../models/user';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet],
+  imports: [CommonModule, RouterOutlet, InputTextModule, ReactiveFormsModule, ButtonModule, TableModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
+  private formBuilder = inject(FormBuilder);
+  private userService = inject(UserService);
+
   title = 'AzureCICDUI';
+  form!: FormGroup;
+
+  contentList$ = this.userService.getAll();
+
+  ngOnInit(): void {
+    this.form = this.formBuilder.group({
+      content: ['', Validators.required]
+    });
+  }
+
+  saveContent() {
+    if (this.form.dirty) {
+      const user: User = { ...this.form.value };
+
+      this.userService.createPost(user)
+        .pipe(
+          take(1),
+          switchMap(() => this.userService.getAll()),
+          tap(() => {
+            this.contentList$ = this.userService.getAll();
+          })
+        )
+        .subscribe();
+    }
+  }
 }
-
-// jel moram pazit na default outputPath da se ne izvrši svaki put odnosno da ga moram prebacit u development config
-//ne moram prebacit, to je default output ako nije specificirano
-
-//što je sa production sourceMap? -> default je false na prod
-

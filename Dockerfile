@@ -10,6 +10,22 @@ RUN npm run build --prod
 # Stage 2: Build the ASP.NET app (AzureCICD)
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS aspnet-build
 WORKDIR /src
+
+# Copy the Core project files
+COPY Core/Core.csproj Core/
+# Copy the Infrastructure project files
+COPY Infrastructure/Infrastructure.csproj Infrastructure/
+
+# Restore the Core project
+RUN dotnet restore Core/Core.csproj
+# Restore the Infrastructure project
+RUN dotnet restore Infrastructure/Infrastructure.csproj
+
+# Now copy the rest of the Core and Infrastructure project files
+COPY Core/ Core/
+COPY Infrastructure/ Infrastructure/
+
+# Restore and publish the main project, AzureCICD
 COPY AzureCICD/AzureCICD.csproj .
 RUN dotnet restore
 COPY AzureCICD/ .

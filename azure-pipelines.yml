@@ -10,23 +10,40 @@ variables:
   # Define different tags for main and develop branches
   ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
     imageTag: '$(Build.BuildId)'  # Unique tag for production
+    appServiceName: 'myfeatures'   # Production App Service name
   ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/develop') }}:
-    imageTag: 'dev'  # Static tag for development
+    imageTag: 'dev'                # Static tag for development
+    appServiceName: 'myfeaturesdev' # Development App Service name
 
-steps:
-- task: Docker@2
-  displayName: 'Login to Azure Container Registry'
-  inputs:
-    containerRegistry: 'myServiceConnection'
-    command: 'login'
+stages:
+- stage: BuildAndPush
+  jobs:
+  - job: Build
+    steps:
+    - task: Docker@2
+      displayName: 'Login to Azure Container Registry'
+      inputs:
+        containerRegistry: 'myServiceConnection'
+        command: 'login'
 
-- task: Docker@2
-  displayName: 'Build and Push Docker Image'
-  inputs:
-    containerRegistry: 'myServiceConnection'
-    repository: 'rg1ContainerRegistry/acrRepository'
-    command: 'buildAndPush'
-    Dockerfile: '**/Dockerfile'
-    buildContext: '.'
-    tags: |
-      $(imageTag)
+    - task: Docker@2
+      displayName: 'Build and Push Docker Image'
+      inputs:
+        containerRegistry: 'myServiceConnection'
+        repository: 'rg1ContainerRegistry/acrRepository-3'
+        command: 'buildAndPush'
+        Dockerfile: '**/Dockerfile'
+        buildContext: '.'
+        tags: |
+          $(imageTag)
+
+- stage: Deploy
+  condition: succeeded()
+  jobs:
+  - job: DeployWebApp
+    steps:
+    - task: AzureWebAppContainer@1
+      inputs:
+        azureSubscription: 'azureServiceConnection'
+        appName: '$(appServiceName)'
+        containers: 'rg1ContainerRegistry/acrRepository-3:$(imageTag)'

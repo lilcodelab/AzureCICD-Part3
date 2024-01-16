@@ -30,7 +30,7 @@ stages:
       displayName: 'Build and Push Docker Image'
       inputs:
         containerRegistry: 'myServiceConnection'
-        repository: 'rg1ContainerRegistry/acrRepository'
+        repository: 'rg1ContainerRegistry/acrRepository-3'
         command: 'buildAndPush'
         Dockerfile: '**/Dockerfile'
         buildContext: '.'
@@ -46,4 +46,4 @@ stages:
       inputs:
         azureSubscription: 'azureServiceConnection'
         appName: '$(appServiceName)'
-        containers: 'rg1ContainerRegistry/acrRepository:$(imageTag)'
+        containers: 'rg1ContainerRegistry/acrRepository-3:$(imageTag)'

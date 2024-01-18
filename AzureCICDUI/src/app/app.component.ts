@@ -24,7 +24,7 @@ export class AppComponent implements OnInit {
   title = 'AzureCICDUI';
   form!: FormGroup;
 
-  contentList$ = this.userService.getAll();
+  // contentList$ = this.userService.getAll();
 
   ngOnInit(): void {
     this.form = this.formBuilder.group({

@@ -1,8 +1,5 @@
 ﻿using Core.Interfaces;
 using Core.Services;
-using Infrastructure.DAL;
-using Infrastructure.Helpers;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 var _configuration = builder.Configuration;
@@ -16,14 +13,14 @@ var _configuration = builder.Configuration;
 
 builder.Services.AddScoped<IUserService, UserService>();
 
-builder.Services.AddDbContext<AzureCICDDbContext>(options =>
-{
-    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-    options.UseSqlServer(connectionString, sqlServerOptions =>
-    {
-        sqlServerOptions.EnableRetryOnFailure();
-    });
-});
+//builder.Services.AddDbContext<AzureCICDDbContext>(options =>
+//{
+//    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+//    options.UseSqlServer(connectionString, sqlServerOptions =>
+//    {
+//        sqlServerOptions.EnableRetryOnFailure();
+//    });
+//});
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -63,6 +60,6 @@ app.MapControllers();
 //dodano zbog UI
 app.MapFallbackToFile("index.html");
 
-StartupHelper.ApplyMigrations(app);
+//StartupHelper.ApplyMigrations(app);
 
 app.Run();

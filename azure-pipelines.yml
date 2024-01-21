@@ -44,6 +44,6 @@ stages:
     steps:
     - task: AzureWebAppContainer@1
       inputs:
-        azureSubscription: 'azureServiceConnection'
+        azureSubscription: 'arm-service-connection'
         appName: '$(appServiceName)'
         containers: 'myfeaturescontainerregistry/acr-repository-3:$(imageTag)'

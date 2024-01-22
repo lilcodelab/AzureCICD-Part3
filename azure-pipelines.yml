@@ -23,14 +23,14 @@ stages:
     - task: Docker@2
       displayName: 'Login to Azure Container Registry'
       inputs:
-        containerRegistry: 'myServiceConnection'
+        containerRegistry: 'my-service-connection'
         command: 'login'
 
     - task: Docker@2
       displayName: 'Build and Push Docker Image'
       inputs:
-        containerRegistry: 'myServiceConnection'
-        repository: 'rg1ContainerRegistry/acrRepository-3'
+        containerRegistry: 'my-service-connection'
+        repository: 'myfeaturescontainerregistry/acr-repository-3'
         command: 'buildAndPush'
         Dockerfile: '**/Dockerfile'
         buildContext: '.'
@@ -44,6 +44,8 @@ stages:
     steps:
     - task: AzureWebAppContainer@1
       inputs:
-        azureSubscription: 'azureServiceConnection'
+        azureSubscription: 'arm-service-connection'
         appName: '$(appServiceName)'
-        containers: 'rg1ContainerRegistry/acrRepository-3:$(imageTag)'
+        containers: 'myfeaturescontainerregistry.azurecr.io/myfeaturescontainerregistry/acr-repository-3:$(imageTag)'
+
+

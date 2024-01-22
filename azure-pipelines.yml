@@ -46,4 +46,5 @@ stages:
       inputs:
         azureSubscription: 'arm-service-connection'
         appName: '$(appServiceName)'
-        containers: 'myfeaturescontainerregistry/acr-repository-3:$(imageTag)'
+        containers: 'myfeaturescontainerregistry.azurecr.io/acr-repository-3:$(imageTag)'
+

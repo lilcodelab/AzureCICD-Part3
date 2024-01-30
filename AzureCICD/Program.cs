@@ -46,10 +46,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-//privremeno zakomentirano zbogo ovog errora
-//Microsoft.AspNetCore.HttpsPolicy.HttpsRedirectionMiddleware[3]
-//Failed to determine the https port for redirect.
-//app.UseHttpsRedirection();
+app.UseHttpsRedirection();
 
 //dodano zbog UI
 app.UseStaticFiles();
@@ -62,6 +59,6 @@ app.MapControllers();
 //dodano zbog UI
 app.MapFallbackToFile("index.html");
 
-//StartupHelper.ApplyMigrations(app);
+StartupHelper.ApplyMigrations(app);
 
 app.Run();

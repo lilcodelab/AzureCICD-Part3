@@ -5,6 +5,7 @@ import { RouterOutlet } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
+import { switchMap } from 'rxjs';
 import { User } from '../models/user';
 import { UserService } from '../services/user.service';
 
@@ -22,7 +23,7 @@ export class AppComponent implements OnInit {
   title = 'AzureCICDUI';
   form!: FormGroup;
 
-  // contentList$ = this.userService.getAll();
+  contentList$ = this.userService.getAll();
 
   ngOnInit(): void {
     this.form = this.formBuilder.group({
@@ -34,15 +35,9 @@ export class AppComponent implements OnInit {
     if (this.form.dirty) {
       const user: User = { ...this.form.value };
 
-      // this.userService.createPost(user)
-      //   .pipe(
-      //     take(1),
-      //     switchMap(() => this.userService.getAll()),
-      //     tap(() => {
-      //       this.contentList$ = this.userService.getAll();
-      //     })
-      //   )
-      //   .subscribe();
+      this.contentList$ = this.userService.createPost(user).pipe(
+        switchMap(() => this.userService.getAll())
+      );
     }
   }
 }

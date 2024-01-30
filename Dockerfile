@@ -4,8 +4,15 @@ WORKDIR /app
 COPY AzureCICDUI/package*.json ./
 RUN npm install
 COPY AzureCICDUI/ .
-# Build the Angular application for production
-RUN npm run build --prod
+
+# Introduce ARG for build environment
+ARG BUILD_ENV=production
+# Use the BUILD_ENV argument to specify the Angular build configuration
+RUN if [ "$BUILD_ENV" = "production" ]; then \
+  npm run build --prod; \
+  else \
+  npm run build --configuration="$BUILD_ENV"; \
+  fi
 
 # Stage 2: Build the ASP.NET app (AzureCICD)
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS aspnet-build

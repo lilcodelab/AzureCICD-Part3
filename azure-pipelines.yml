@@ -7,13 +7,14 @@ pool:
 
 variables:
   DOCKER_BUILDKIT: 1
-  # Define different tags for main and develop branches
   ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
-    imageTag: '$(Build.BuildId)'  # Unique tag for production
-    appServiceName: 'myfeatures'   # Production App Service name
+    imageTag: '$(Build.BuildId)'
+    appServiceName: 'myfeatures'
+    BUILD_ENV: 'production'  # Set BUILD_ENV for production
   ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/develop') }}:
-    imageTag: 'dev'                # Static tag for development
-    appServiceName: 'myfeaturesdev' # Development App Service name
+    imageTag: 'dev'
+    appServiceName: 'myfeaturesdev'
+    BUILD_ENV: 'staging'  # Set BUILD_ENV for staging
 
 stages:
 - stage: BuildAndPush
@@ -34,6 +35,7 @@ stages:
         command: 'buildAndPush'
         Dockerfile: '**/Dockerfile'
         buildContext: '.'
+        arguments: '--build-arg BUILD_ENV=$(BUILD_ENV)'  # Pass BUILD_ENV as build argument
         tags: |
           $(imageTag)
 
@@ -47,5 +49,3 @@ stages:
         azureSubscription: 'arm-service-connection'
         appName: '$(appServiceName)'
         containers: 'myfeaturescontainerregistry.azurecr.io/myfeaturescontainerregistry/acr-repository-3:$(imageTag)'
-
-

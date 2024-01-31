@@ -37,7 +37,7 @@ stages:
         buildContext: '.'
         arguments: '--build-arg BUILD_ENV=$(BUILD_ENV)'  # Pass BUILD_ENV as build argument
         tags: |
-          $(imageTag)
+          dev
 
 - stage: Deploy
   condition: succeeded()

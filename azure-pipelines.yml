@@ -11,7 +11,7 @@ variables:
     imageTag: '$(Build.BuildId)'
     appServiceName: 'myfeatures'
     BUILD_ENV: 'production'  # Set BUILD_ENV for production
-  ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/develop') }}:
+  ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/development') }}:
     imageTag: 'dev'
     appServiceName: 'myfeaturesdev'
     BUILD_ENV: 'staging'  # Set BUILD_ENV for staging

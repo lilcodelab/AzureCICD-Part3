@@ -10,11 +10,13 @@ variables:
   ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
     imageTag: '$(Build.BuildId)'
     appServiceName: 'myfeatures'
-    BUILD_ENV: 'production'  # Set BUILD_ENV for production
+    BUILD_ENV: 'production'  # Angular build env
+    DOTNET_ENV: 'Production' # .NET environment
   ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/development') }}:
     imageTag: 'dev'
     appServiceName: 'myfeaturesdev'
-    BUILD_ENV: 'staging'  # Set BUILD_ENV for staging
+    BUILD_ENV: 'staging'    # Angular build env
+    DOTNET_ENV: 'Staging'   # .NET environment
 
 stages:
 - stage: BuildAndPush
@@ -35,7 +37,7 @@ stages:
         command: 'build'
         Dockerfile: 'Dockerfile'
         buildContext: '.'
-        arguments: '--build-arg BUILD_ENV=$(BUILD_ENV)'
+        arguments: '--build-arg BUILD_ENV=$(BUILD_ENV) --build-arg DOTNET_ENV=$(DOTNET_ENV)'
         tags: |
           $(imageTag)
 

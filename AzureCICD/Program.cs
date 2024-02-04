@@ -32,6 +32,9 @@ builder.Services.AddSwaggerGen();
 
 var allowedOrigins = builder.Configuration.GetSection("CorsOrigins:AllowedOrigins").Get<string[]>();
 
+var corsOrigins = builder.Configuration.GetSection("CorsOrigins:AllowedOrigins").Get<string[]>();
+Console.WriteLine($"DAVID JEL OVDJE BUG Origins: {string.Join(", ", allowedOrigins)}");
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy", corsBuilder =>

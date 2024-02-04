@@ -52,4 +52,7 @@ ENV ASPNETCORE_ENVIRONMENT=Staging
 COPY --from=aspnet-build /app/publish .
 # Copy the Angular build output from the 'dist/azure-cicdui' directory to 'wwwroot'
 COPY --from=angular-build /app/dist/azure-cicdui ./wwwroot
+
+RUN ls -la # This will list the files in the current directory
+
 ENTRYPOINT ["dotnet", "AzureCICD.dll"]

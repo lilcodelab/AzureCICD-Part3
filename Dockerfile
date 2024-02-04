@@ -47,7 +47,7 @@ WORKDIR /app
 # Introduce ARG for the .NET environment within the runtime stage
 ARG DOTNET_ENV=Production
 # Set the ASP.NET Core environment variable based on the DOTNET_ENV argument
-ENV ASPNETCORE_ENVIRONMENT=Staging
+ENV ASPNETCORE_ENVIRONMENT=${DOTNET_ENV}
 
 COPY --from=aspnet-build /app/publish .
 # Copy the Angular build output from the 'dist/azure-cicdui' directory to 'wwwroot'

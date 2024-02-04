@@ -30,12 +30,16 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+var allowedOrigins = builder.Configuration.GetSection("CorsOrigins:AllowedOrigins").Get<string[]>();
+
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("CorsPolicy", builder =>
-    builder.AllowAnyOrigin()
-    .AllowAnyMethod()
-    .AllowAnyHeader());
+    options.AddPolicy("CorsPolicy", corsBuilder =>
+    {
+        corsBuilder.WithOrigins(allowedOrigins)
+                   .AllowAnyMethod()
+                   .AllowAnyHeader();
+    });
 });
 
 var app = builder.Build();

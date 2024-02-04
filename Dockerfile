@@ -14,11 +14,14 @@ RUN if [ "$BUILD_ENV" = "production" ]; then \
   npm run build:staging; \
   fi
 
-ARG DOTNET_ENV=production
-ENV ASPNETCORE_ENVIRONMENT=${DOTNET_ENV}
 # Stage 2: Build the ASP.NET app (AzureCICD)
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS aspnet-build
 WORKDIR /src
+
+# Introduce ARG for the .NET environment within the ASP.NET build stage
+ARG DOTNET_ENV=Staging
+# Set the ASP.NET Core environment variable based on the DOTNET_ENV argument
+ENV ASPNETCORE_ENVIRONMENT=${DOTNET_ENV}
 
 # Copy over the project files first and restore them
 COPY Core/Core.csproj Core/

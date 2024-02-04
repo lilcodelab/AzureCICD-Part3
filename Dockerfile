@@ -49,6 +49,9 @@ ARG DOTNET_ENV=Production
 # Set the ASP.NET Core environment variable based on the DOTNET_ENV argument
 ENV ASPNETCORE_ENVIRONMENT=Staging
 
+# Add a command to echo the ASPNETCORE_ENVIRONMENT to confirm it's set correctly
+RUN echo "ASPNETCORE_ENVIRONMENT is set to ${ASPNETCORE_ENVIRONMENT}"
+
 COPY --from=aspnet-build /app/publish .
 # Copy the Angular build output from the 'dist/azure-cicdui' directory to 'wwwroot'
 COPY --from=angular-build /app/dist/azure-cicdui ./wwwroot

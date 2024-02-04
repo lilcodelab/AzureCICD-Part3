@@ -18,11 +18,6 @@ RUN if [ "$BUILD_ENV" = "production" ]; then \
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS aspnet-build
 WORKDIR /src
 
-# Introduce ARG for the .NET environment within the ASP.NET build stage
-ARG DOTNET_ENV=Production
-# Set the ASP.NET Core environment variable based on the DOTNET_ENV argument
-ENV ASPNETCORE_ENVIRONMENT=${DOTNET_ENV}
-
 # Copy over the project files first and restore them
 COPY Core/Core.csproj Core/
 COPY Infrastructure/Infrastructure.csproj Infrastructure/
@@ -48,6 +43,12 @@ RUN dotnet publish -c Release -o /app/publish
 # Stage 3: Build the final runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
 WORKDIR /app
+
+# Introduce ARG for the .NET environment within the runtime stage
+ARG DOTNET_ENV=Production
+# Set the ASP.NET Core environment variable based on the DOTNET_ENV argument
+ENV ASPNETCORE_ENVIRONMENT=${DOTNET_ENV}
+
 COPY --from=aspnet-build /app/publish .
 # Copy the Angular build output from the 'dist/azure-cicdui' directory to 'wwwroot'
 COPY --from=angular-build /app/dist/azure-cicdui ./wwwroot

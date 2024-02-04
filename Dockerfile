@@ -9,9 +9,9 @@ COPY AzureCICDUI/ .
 ARG BUILD_ENV=production
 # Use the BUILD_ENV argument to specify the Angular build configuration
 RUN if [ "$BUILD_ENV" = "production" ]; then \
-  npm run build --prod; \
+  npm run build:prod; \
   else \
-  npm run build --configuration="$BUILD_ENV"; \
+  npm run build:staging; \
   fi
 
 # Stage 2: Build the ASP.NET app (AzureCICD)

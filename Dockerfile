@@ -19,7 +19,7 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS aspnet-build
 WORKDIR /src
 
 # Introduce ARG for the .NET environment within the ASP.NET build stage
-ARG DOTNET_ENV=Staging
+ARG DOTNET_ENV=Production
 # Set the ASP.NET Core environment variable based on the DOTNET_ENV argument
 ENV ASPNETCORE_ENVIRONMENT=${DOTNET_ENV}
 

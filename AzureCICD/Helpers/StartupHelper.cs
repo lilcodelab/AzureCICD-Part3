@@ -12,8 +12,8 @@ namespace Infrastructure.Helpers
                 var services = scope.ServiceProvider;
                 try
                 {
-                    var context = services.GetRequiredService<AzureCICDDbContext>(); // Replace with your actual DbContext
-                    context.Database.Migrate(); // This applies any pending migrations
+                    var context = services.GetRequiredService<AzureCICDDbContext>();
+                    context.Database.Migrate();
                 }
                 catch (Exception ex)
                 {

@@ -7,13 +7,6 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 var _configuration = builder.Configuration;
 
-// Add services to the container.
-
-//zapisat da moram eksplicitno dodat referencu sa webapi na core, sa core na infrastructure kroz csproj
-//inače nije mogao iz web apia prepoznat AzureCICDDbContext
-
-//zapisat da moram entity framework design instalirat u web api inače migracije ne rade
-
 builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddDbContext<AzureCICDDbContext>(options =>
@@ -53,7 +46,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-//dodano zbog UI
 app.UseStaticFiles();
 
 app.UseRouting();
@@ -61,7 +53,7 @@ app.UseRouting();
 app.UseCors("CorsPolicy");
 
 app.MapControllers();
-//dodano zbog UI
+
 app.MapFallbackToFile("index.html");
 
 StartupHelper.ApplyMigrations(app);
